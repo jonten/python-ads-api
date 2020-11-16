@@ -21,10 +21,14 @@ async def root():
 
 @app.post("/ads/", status_code=201)
 async def create_ad(ad: Ad):
-    query = "INSERT INTO ads  (subject, body, email, price) VALUES ($1, $2, $3, $4)"
-    conn = await asyncpg.connect(user="adsuser", database="adsdb")
-    await conn.execute(query, ad.subject, ad.body, ad.email, ad.price)
+    await db_create_ad(ad)
     return ad
+
+
+async def db_create_ad(ad):
+    conn = await asyncpg.connect(user="adsuser", database="adsdb")
+    query = "INSERT INTO ads  (subject, body, email, price) VALUES ($1, $2, $3, $4)"
+    await conn.execute(query, ad.subject, ad.body, ad.email, ad.price)
 
 
 @app.on_event("startup")
@@ -67,4 +71,3 @@ def shutdown_event():
     conn.close()
     with open("log.txt", mode="a") as log:
         log.write("Application shutdown")
-
