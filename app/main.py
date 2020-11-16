@@ -1,12 +1,33 @@
+from typing import Optional
 from fastapi import FastAPI
+from fastapi.encoders import jsonable_encoder
+from pydantic import BaseModel, EmailStr
 import asyncpg
+import datetime
 
-
-app = FastAPI()
 
 conn = None
 row = None
-ads = None
+
+class Ad(BaseModel):
+    subject: str
+    body: str
+    email: EmailStr
+    price: Optional[float] = None
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"message": "Default API endpoint is /ads and documentation endpoint is /docs"}
+
+@app.post("/ads/", status_code=201)
+async def create_ad(ad: Ad):
+    query = "INSERT INTO ads  (subject, body, email, price) VALUES ($1, $2, $3, $4)"
+    conn = await asyncpg.connect(user="adsuser", database="adsdb")
+    await conn.execute(query, ad)
+    return ad
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -49,7 +70,3 @@ def shutdown_event():
     with open("log.txt", mode="a") as log:
         log.write("Application shutdown")
 
-
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
