@@ -23,7 +23,7 @@ async def root():
 async def create_ad(ad: Ad):
     query = "INSERT INTO ads  (subject, body, email, price) VALUES ($1, $2, $3, $4)"
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
-    await conn.execute(query, ad)
+    await conn.execute(query, ad.subject, ad.body, ad.email, ad.price)
     return ad
 
 
@@ -56,7 +56,7 @@ async def startup_event():
             body text,
             price numeric,
             email text,
-            created timestamp
+            created timestamp DEFAULT NOW()
         )
     ''')
     return conn
