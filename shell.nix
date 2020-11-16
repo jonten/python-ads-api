@@ -6,6 +6,7 @@ pkgs.mkShell {
     pkgs.python38Packages.pip
     pkgs.python38Packages.virtualenv
     pkgs.python38Packages.poetry
+    pkgs.python38Packages.pylint
     pkgs.postgresql_12
     
   ];
