@@ -1,9 +1,7 @@
 from typing import Optional
 from fastapi import FastAPI
-from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel, EmailStr
 import asyncpg
-import datetime
 
 
 conn = None
