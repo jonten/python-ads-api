@@ -27,19 +27,17 @@ pkgs.mkShell {
     pg_ctl start -l $PGLOG -o "--unix_socket_directories='$PGHOST'"
   fi
 
-  if [ ! -d app/.venv/lib/python3.8/site-packages/asyncpg ]; then
-    poetry new app --name routers
-    cd app
+  if [ ! -d .venv/lib/python3.8/site-packages/asyncpg ]; then
     poetry config virtualenvs.in-project true
     poetry env use python3.8
+    poetry install
     poetry add fastapi --extras all
     poetry add aiomisc --extras uvloop
     poetry add asyncpg
-    poetry run uvicorn main:app --reload
+    poetry run uvicorn app.main:app --reload
   else
     echo "Project is already setup.. Starting app now"
-    cd app
-    poetry run uvicorn main:app --reload
+    poetry run uvicorn app.main:app --reload
   fi
 
 '';
