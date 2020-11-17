@@ -6,6 +6,7 @@ pkgs.mkShell {
     pkgs.python38Packages.pip
     pkgs.python38Packages.virtualenv
     pkgs.python38Packages.poetry
+    pkgs.python38Packages.pylint
     pkgs.postgresql_12
     
   ];
@@ -26,10 +27,11 @@ pkgs.mkShell {
   then
     pg_ctl start -l $PGLOG -o "--unix_socket_directories='$PGHOST'"
   fi
- 
+
   poetry config virtualenvs.in-project true
   poetry env use python3.8
   poetry install
+  echo "Starting app now"
   poetry run uvicorn app.main:app --reload
 
 '';
