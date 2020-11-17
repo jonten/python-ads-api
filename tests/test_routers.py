@@ -1,4 +1,4 @@
-from routers import __version__
+from app.routers import __version__
 
 
 def test_version():
