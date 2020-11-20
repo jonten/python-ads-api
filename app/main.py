@@ -2,7 +2,7 @@
 # pylint: disable=no-self-argument
 # pylint: disable=f-string-without-interpolation
 
-from typing import Optional
+from typing import Optional, Dict
 from fastapi import FastAPI
 from pydantic import BaseModel, EmailStr
 import asyncpg
@@ -27,13 +27,19 @@ async def create_ad(new_ad: Ad):
     await db_create_ad(new_ad)
     return new_ad
 
-
 async def db_create_ad(new_ad):
     """Function for creating new ads in the database"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
     query = "INSERT INTO ads  (subject, body, email, price) VALUES ($1, $2, $3, $4)"
     await conn.execute(query, new_ad.subject, new_ad.body, new_ad.email, new_ad.price)
 
+@app.get("/ads/", status_code=200)
+async def get_ads():
+    """Route function for listing all ads"""
+    conn = await asyncpg.connect(user="adsuser", database="adsdb")
+    #count = await conn.fetchrow("SELECT id FROM ads")
+    row = await conn.fetchrow("SELECT subject, body, price FROM ads")
+    return row
 
 @app.on_event("startup")
 async def startup_event():
