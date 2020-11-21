@@ -37,8 +37,7 @@ async def db_create_ad(new_ad):
 async def get_ads():
     """Route function for listing all ads"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
-    #count = await conn.fetchrow("SELECT id FROM ads")
-    row = await conn.fetchrow("SELECT subject, body, price FROM ads")
+    row = await conn.fetch("SELECT subject, body, price FROM ads")
     return row
 
 @app.on_event("startup")
