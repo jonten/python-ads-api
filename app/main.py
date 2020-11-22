@@ -2,7 +2,7 @@
 # pylint: disable=no-self-argument
 # pylint: disable=f-string-without-interpolation
 
-from typing import Optional, Dict
+from typing import Optional
 from fastapi import FastAPI
 from pydantic import BaseModel, EmailStr
 import asyncpg
@@ -30,15 +30,30 @@ async def create_ad(new_ad: Ad):
 async def db_create_ad(new_ad):
     """Function for creating new ads in the database"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
-    query = "INSERT INTO ads  (subject, body, email, price) VALUES ($1, $2, $3, $4)"
+    query = "INSERT INTO ads (subject, body, email, price) VALUES ($1, $2, $3, $4)"
     await conn.execute(query, new_ad.subject, new_ad.body, new_ad.email, new_ad.price)
 
 @app.get("/ads/", status_code=200)
-async def get_ads():
+async def get_ads(
+    order_by_price:Optional[str] = None,
+    order_by_timestamp:Optional[str] = None,
+    q:Optional[str] = None):
     """Route function for listing all ads"""
+    list_ads = await db_get_ads()
+    if q:
+        return list_ads.update(
+            {"q": q, "ORDER BY price DESC": order_by_price,
+            "ORDER BY created DESC": order_by_timestamp}
+        )
+    return list_ads
+
+async def db_get_ads():
+    """Function for getting all ads from the database"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
-    row = await conn.fetch("SELECT subject, body, price FROM ads")
-    return row
+    query = "SELECT subject, body, price FROM ads"
+    results = await conn.fetch(query)
+    return results
+
 
 @app.on_event("startup")
 async def startup_event():
