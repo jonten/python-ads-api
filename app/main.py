@@ -34,23 +34,27 @@ async def db_create_ad(new_ad):
     await conn.execute(query, new_ad.subject, new_ad.body, new_ad.email, new_ad.price)
 
 @app.get("/ads/", status_code=200)
-async def get_ads(
-    order_by_price:Optional[str] = None,
-    order_by_timestamp:Optional[str] = None,
-    q:Optional[str] = None):
+async def get_ads(sort_by_price:Optional[bool] = False,
+    sort_by_created:Optional[bool] = False):
     """Route function for listing all ads"""
-    list_ads = await db_get_ads()
-    if q:
-        return list_ads.update(
-            {"q": q, "ORDER BY price DESC": order_by_price,
-            "ORDER BY created DESC": order_by_timestamp}
-        )
+    if sort_by_price:
+        list_ads = await db_get_ads(sort_by_price)
+    elif sort_by_created:
+        list_ads = await db_get_ads(sort_by_created)
+    else:
+        list_ads = await db_get_ads()
     return list_ads
 
-async def db_get_ads():
+async def db_get_ads(sort_by_price:Optional[bool] = False,
+    sort_by_created:Optional[bool] = False):
     """Function for getting all ads from the database"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
-    query = "SELECT subject, body, price FROM ads"
+    if sort_by_price:
+        query = "SELECT subject, body, price FROM ads ORDER BY price DESC"
+    elif sort_by_created:
+        query = "SELECT subject, body, price FROM ads ORDER BY created DESC"
+    else:
+        query = "SELECT subject, body, price FROM ads"
     results = await conn.fetch(query)
     return results
 
