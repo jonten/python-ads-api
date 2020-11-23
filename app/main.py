@@ -50,11 +50,11 @@ async def db_get_ads(sort_by_price:Optional[bool] = False,
     """Function for getting all ads from the database"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
     if sort_by_price:
-        query = "SELECT subject, body, price FROM ads ORDER BY price DESC"
+        query = "SELECT id, subject, body, price FROM ads ORDER BY price DESC"
     elif sort_by_created:
-        query = "SELECT subject, body, price FROM ads ORDER BY created DESC"
+        query = "SELECT id, subject, body, price FROM ads ORDER BY created DESC"
     else:
-        query = "SELECT subject, body, price FROM ads"
+        query = "SELECT id, subject, body, price FROM ads"
     results = await conn.fetch(query)
     return results
 
