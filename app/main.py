@@ -33,6 +33,19 @@ async def db_create_ad(new_ad):
     query = "INSERT INTO ads (subject, body, email, price) VALUES ($1, $2, $3, $4)"
     await conn.execute(query, new_ad.subject, new_ad.body, new_ad.email, new_ad.price)
 
+@app.get("/ads/{id}", status_code=200)
+async def get_ad(id:int = None):
+    """Route function for listing one ad"""
+    list_ad = await db_get_ad(id=id)
+    return list_ad
+
+async def db_get_ad(id:int = None):
+    """Function for getting one ad from the database"""
+    conn = await asyncpg.connect(user="adsuser", database="adsdb")
+    query = "SELECT id, subject, body, price FROM ads WHERE id=$1"
+    results = await conn.fetchrow(query, id)
+    return results
+
 @app.get("/ads/", status_code=200)
 async def get_ads(sort_by_price:Optional[bool] = False,
     sort_by_created:Optional[bool] = False):
