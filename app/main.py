@@ -38,9 +38,9 @@ async def get_ads(sort_by_price:Optional[bool] = False,
     sort_by_created:Optional[bool] = False):
     """Route function for listing all ads"""
     if sort_by_price:
-        list_ads = await db_get_ads(sort_by_price)
+        list_ads = await db_get_ads(sort_by_price=sort_by_price)
     elif sort_by_created:
-        list_ads = await db_get_ads(sort_by_created)
+        list_ads = await db_get_ads(sort_by_created=sort_by_created)
     else:
         list_ads = await db_get_ads()
     return list_ads
