@@ -33,17 +33,30 @@ async def db_create_ad(new_ad):
     query = "INSERT INTO ads (subject, body, email, price) VALUES ($1, $2, $3, $4)"
     await conn.execute(query, new_ad.subject, new_ad.body, new_ad.email, new_ad.price)
 
-@app.get("/ads/{id}", status_code=200)
-async def get_ad(id:int = None):
+@app.delete("/ads/{ad_id}", status_code=200)
+async def delete_ad(ad_id:int = None):
+    """Route function for deleting one ad"""
+    deleted_ad = await db_delete_ad(ad_id=ad_id)
+    return deleted_ad
+
+async def db_delete_ad(ad_id:int = None):
+    """Function for deleting one ad from the database"""
+    conn = await asyncpg.connect(user="adsuser", database="adsdb")
+    query = "DELETE FROM ads WHERE id=$1"
+    results = await conn.fetchrow(query, ad_id)
+    return results
+
+@app.get("/ads/{ad_id}", status_code=200)
+async def get_ad(ad_id:int = None):
     """Route function for listing one ad"""
-    list_ad = await db_get_ad(id=id)
+    list_ad = await db_get_ad(ad_id=ad_id)
     return list_ad
 
-async def db_get_ad(id:int = None):
+async def db_get_ad(ad_id:int = None):
     """Function for getting one ad from the database"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
     query = "SELECT id, subject, body, price FROM ads WHERE id=$1"
-    results = await conn.fetchrow(query, id)
+    results = await conn.fetchrow(query, ad_id)
     return results
 
 @app.get("/ads/", status_code=200)
@@ -97,7 +110,7 @@ async def startup_event():
         # Create table if not exist
         await conn.execute('''
         CREATE TABLE IF NOT EXISTS ads(
-            id serial PRIMARY KEY,
+            ad_id serial PRIMARY KEY,
             subject text,
             body text,
             price numeric,
