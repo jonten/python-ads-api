@@ -3,7 +3,7 @@
 # pylint: disable=f-string-without-interpolation
 
 from typing import Optional
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr
 import asyncpg
 
@@ -14,7 +14,12 @@ class Ad(BaseModel):
     email: EmailStr
     price: Optional[float] = None
 
+class DbZeroRowsDeleted(Exception):
+    """Create Exception class for handling zero deleted rows in DB"""
+
 app = FastAPI()
+
+
 
 @app.get("/", status_code=200)
 async def root():
@@ -36,14 +41,19 @@ async def db_create_ad(new_ad):
 @app.delete("/ads/{ad_id}", status_code=200)
 async def delete_ad(ad_id:int = None):
     """Route function for deleting one ad"""
-    deleted_ad = await db_delete_ad(ad_id=ad_id)
+    try:
+        deleted_ad = await db_delete_ad(ad_id=ad_id)
+    except DbZeroRowsDeleted as e:
+        raise HTTPException(status_code=404, detail="Item not found") from e
     return deleted_ad
 
 async def db_delete_ad(ad_id:int = None):
     """Function for deleting one ad from the database"""
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
     query = "DELETE FROM ads WHERE id=$1"
-    results = await conn.fetchrow(query, ad_id)
+    results = await conn.execute(query, ad_id)
+    if results.endswith("0"):
+        raise DbZeroRowsDeleted()
     return results
 
 @app.get("/ads/{ad_id}", status_code=200)
