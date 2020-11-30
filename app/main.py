@@ -1,6 +1,8 @@
 # pylint: disable=no-name-in-module
 # pylint: disable=no-self-argument
 # pylint: disable=f-string-without-interpolation
+# pylint: disable=invalid-name
+"""Pylint checking are disabled for the things above"""
 
 from typing import Optional
 from fastapi import FastAPI, HTTPException
