@@ -12,6 +12,9 @@ asyncpg = "^0.21.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
+pylint = "^2.6.0"
+typer = "^0.3.2"
+typer-cli = "^0.0.11"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
