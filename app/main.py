@@ -69,3 +69,7 @@ async def startup_event():
 async def shutdown_event():
     """Shutdown event for closing the database connection"""
     await db.close_connection()
+
+if __name__ == "__main__":
+    app()
+

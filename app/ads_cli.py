@@ -1,7 +1,6 @@
 import typer
-from typing import Optional
-from app import db
-from app.main import Ad
+from app import main
+#from app.main import Ad
 
 app = typer.Typer(help="Ads Admin CLI")
 
@@ -78,5 +77,5 @@ def create(new_ad: Ad):
 #     typer.echo("Initializing user database")
 
 
-if __name__ == "__main__":
-    app()
+#if __name__ == "__main__":
+#    app()
