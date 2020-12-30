@@ -1,32 +1,33 @@
 import typer
 from app import main
+from app import db
 #from app.main import Ad
 
 app = typer.Typer(help="Ads Admin CLI")
 
 @app.command()
-def list_ad(ad_id:int = None):
+async def list_ad(ad_id:int = None):
     """
     List an ad with a specific AD_ID.
     """
-    db.db_get_ad(ad_id)
+    await db.db_get_ad(ad_id)
     typer.echo(f"List ad with ID: {ad_id}")
 
 @app.command()
-def list_all_ads():
+async def list_all_ads():
     """
     List all ads in the database.
     """
-    db.db_get_ads()
+    await db.db_get_ads()
     typer.echo(f"List all ads")
 
 
 @app.command()
-def create(new_ad: Ad):
+async def create(new_ad: Ad):
     """
     Create a new ad with a SUBJECT, BODY, EMAIL and an optional PRICE.
     """
-    db.db_create_ad(new_ad)
+    await db.db_create_ad(new_ad)
     typer.echo(f"Creating ad: {new_ad.SUBJECT}, {new_ad.BODY}, {new_ad.EMAIL}, {new_ad.PRICE}")
 
 
@@ -77,5 +78,5 @@ def create(new_ad: Ad):
 #     typer.echo("Initializing user database")
 
 
-#if __name__ == "__main__":
-#    app()
+if __name__ == "__main__":
+    app()
