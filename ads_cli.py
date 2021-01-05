@@ -1,34 +1,64 @@
-import typer
+#!/usr/bin/env python -W ignore::DeprecationWarning
+
+import anyio
+import asyncio
+import asyncclick as click
+from beautifultable import BeautifulTable
 from app import main
 from app import db
 #from app.main import Ad
+#from functools import update_wrapper
 
-app = typer.Typer(help="Ads Admin CLI")
+#def coroutine(f):
+#    f = asyncio.coroutine(f)
+#    def wrapper(*args, **kwargs):
+#        loop = asyncio.get_event_loop()
+#        return loop.run_until_complete(f(*args, **kwargs))
+#    return update_wrapper(wrapper, f)
 
-@app.command()
-async def list_ad(ad_id:int = None):
+
+@click.group()
+async def cli():
+    await anyio.sleep(0.1)
+    click.echo(f"Admin CLI application")
+
+def create_table(ads_table: list):
+    table = BeautifulTable()
+    for row in ads_table:
+        table.rows.append(ads_table)
+
+    #table.columns.header = ["Subject", "Body", "Email", "Price"]
+    print(ads_table)
+
+@cli.command()
+@click.option("--list", "-l", type=int, help="Lists an ad with a specific ID")
+async def list_ad(ad_id):
     """
     List an ad with a specific AD_ID.
     """
-    await db.db_get_ad(ad_id)
-    typer.echo(f"List ad with ID: {ad_id}")
+    results = await db.db_get_ad(ad_id)
+    click.echo(f"List ad with ID: {ad_id}")
+    click.echo(results)
 
-@app.command()
-async def list_all_ads():
+@cli.command()
+@click.option("--list-all", "-a", help="Lists all ads")
+async def list_all_ads(list_all):
     """
     List all ads in the database.
     """
-    await db.db_get_ads()
-    typer.echo(f"List all ads")
+    results = await db.db_get_ads()
+    table_results = create_table(results)
+    click.echo(f"List of all ads")
+    click.echo(table_results)
 
 
-@app.command()
-async def create(new_ad: Ad):
+@click.command()
+async def create(new_ad):
     """
     Create a new ad with a SUBJECT, BODY, EMAIL and an optional PRICE.
     """
-    await db.db_create_ad(new_ad)
-    typer.echo(f"Creating ad: {new_ad.SUBJECT}, {new_ad.BODY}, {new_ad.EMAIL}, {new_ad.PRICE}")
+    result = await db.db_create_ad(new_ad)
+    click.echo(f"Creating ad: {new_ad.SUBJECT}, {new_ad.BODY}, {new_ad.EMAIL}, {new_ad.PRICE}")
 
 
 # @app.command()
@@ -79,4 +109,5 @@ async def create(new_ad: Ad):
 
 
 if __name__ == "__main__":
-    app()
+    cli()
+
