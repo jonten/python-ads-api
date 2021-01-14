@@ -22,13 +22,13 @@ async def cli():
     await anyio.sleep(0.1)
     click.echo(f"Admin CLI application")
 
-def create_table(ads_table: list):
+def create_table(ads: list):
     table = BeautifulTable()
-    for row in ads_table:
-        table.rows.append(ads_table)
+    for row in ads:
+        table.rows.append(row)
 
     #table.columns.header = ["Subject", "Body", "Email", "Price"]
-    print(ads_table)
+    return table
 
 @cli.command()
 @click.option("--list", "-l", type=int, help="Lists an ad with a specific ID")
