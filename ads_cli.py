@@ -10,14 +10,13 @@ from app import db
 @click.group()
 async def cli():
     await asyncio.sleep(0.1)
-    click.echo(f"Admin CLI application")
 
 def create_table(ads: list):
     table = BeautifulTable()
     for row in ads:
         table.rows.append(row)
 
-    #table.columns.header = ["Subject", "Body", "Email", "Price"]
+    table.columns.header = ["ID", "Subject", "Body", "Price"]
     return table
 
 @cli.command()
