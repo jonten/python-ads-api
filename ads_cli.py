@@ -1,4 +1,5 @@
 import typer
+import asyncio
 from app import main
 from app import db
 #from app.main import Ad
@@ -6,28 +7,30 @@ from app import db
 app = typer.Typer(help="Ads Admin CLI")
 
 @app.command()
-async def list_ad(ad_id:int = None):
+def list_ad(ad_id:int = None):
     """
     List an ad with a specific AD_ID.
     """
-    await db.db_get_ad(ad_id)
+    result = asyncio.run(db.db_get_ad(ad_id))
     typer.echo(f"List ad with ID: {ad_id}")
+    typer.echo(result)
 
 @app.command()
-async def list_all_ads():
+def list_all_ads():
     """
     List all ads in the database.
     """
-    await db.db_get_ads()
+    result = asyncio.run(db.db_get_ads())
     typer.echo(f"List all ads")
+    typer.echo(result)
 
 
 @app.command()
-async def create(new_ad: Ad):
+def create(new_ad):
     """
     Create a new ad with a SUBJECT, BODY, EMAIL and an optional PRICE.
     """
-    await db.db_create_ad(new_ad)
+    asyncio.run(db.db_create_ad(new_ad))
     typer.echo(f"Creating ad: {new_ad.SUBJECT}, {new_ad.BODY}, {new_ad.EMAIL}, {new_ad.PRICE}")
 
 
