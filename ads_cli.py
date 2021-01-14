@@ -1,25 +1,15 @@
 #!/usr/bin/env python -W ignore::DeprecationWarning
 
-import anyio
 import asyncio
 import asyncclick as click
 from beautifultable import BeautifulTable
 from app import main
 from app import db
-#from app.main import Ad
-#from functools import update_wrapper
-
-#def coroutine(f):
-#    f = asyncio.coroutine(f)
-#    def wrapper(*args, **kwargs):
-#        loop = asyncio.get_event_loop()
-#        return loop.run_until_complete(f(*args, **kwargs))
-#    return update_wrapper(wrapper, f)
 
 
 @click.group()
 async def cli():
-    await anyio.sleep(0.1)
+    await asyncio.sleep(0.1)
     click.echo(f"Admin CLI application")
 
 def create_table(ads: list):
