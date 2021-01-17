@@ -20,8 +20,7 @@ def create_table(ads: list):
     return table
 
 @cli.command()
-@click.option("--list", "-l", type=int, help="Lists an ad with a specific ID")
-async def list_ad(ad_id):
+async def list_ad(ad_id: int):
     """
     List an ad with a specific AD_ID.
     """
@@ -30,8 +29,7 @@ async def list_ad(ad_id):
     click.echo(results)
 
 @cli.command()
-@click.option("--list-all", "-a", help="Lists all ads")
-async def list_all_ads(list_all):
+async def list_all():
     """
     List all ads in the database.
     """
@@ -46,7 +44,7 @@ async def create(new_ad):
     """
     Create a new ad with a SUBJECT, BODY, EMAIL and an optional PRICE.
     """
-    result = await db.db_create_ad(new_ad)
+    results = await db.db_create_ad(new_ad)
     click.echo(f"Creating ad: {new_ad.SUBJECT}, {new_ad.BODY}, {new_ad.EMAIL}, {new_ad.PRICE}")
 
 
