@@ -20,13 +20,14 @@ def create_table(ads: list):
     return table
 
 @cli.command()
-async def list_ad(ad_id: int):
+@click.argument("ad_id", type=int)
+async def list_ad(ad_id):
     """
     List an ad with a specific AD_ID.
     """
     results = await db.db_get_ad(ad_id)
-    click.echo(f"List ad with ID: {ad_id}")
-    click.echo(results)
+    table_results = create_table(results)
+    click.echo(table_results)
 
 @cli.command()
 async def list_all():
@@ -35,17 +36,18 @@ async def list_all():
     """
     results = await db.db_get_ads()
     table_results = create_table(results)
-    click.echo(f"List of all ads")
     click.echo(table_results)
 
 
-@click.command()
-async def create(new_ad):
+@cli.command()
+@click.argument("new_ad", nargs=(3))
+async def create_ad(new_ad):
     """
-    Create a new ad with a SUBJECT, BODY, EMAIL and an optional PRICE.
+    Create a new ad with a SUBJECT, BODY, EMAIL and PRICE.
     """
-    results = await db.db_create_ad(new_ad)
-    click.echo(f"Creating ad: {new_ad.SUBJECT}, {new_ad.BODY}, {new_ad.EMAIL}, {new_ad.PRICE}")
+    answer = "{\"subject\": \"new_ad[0]\", \"body\": \"new_ad[1]\", \"email\": \"new_ad[2]\", \"price\": \"new_ad[3]\"}" 
+    results = await db.db_create_ad(answer)
+    click.echo(f"Creating ad {answer}")
 
 
 # @app.command()
