@@ -40,14 +40,25 @@ async def list_all():
 
 
 @cli.command()
-@click.argument("new_ad", nargs=(3))
-async def create_ad(new_ad):
+@click.option("--subject", "-s", required=True, prompt=True, type=str)
+@click.option("--body", "-b", required=True, prompt=True, type=str)
+@click.option("--email", "-e", required=True, prompt=True, type=str)
+@click.option("--price", "-p", required=False, prompt=True, type=float, default=None)
+async def create_ad(subject, body, email, price):
     """
     Create a new ad with a SUBJECT, BODY, EMAIL and PRICE.
     """
-    answer = "{\"subject\": \"new_ad[0]\", \"body\": \"new_ad[1]\", \"email\": \"new_ad[2]\", \"price\": \"new_ad[3]\"}" 
+    new_ad = main.Ad() 
+    ad_dict = {
+        "subject": new_ad.subject,
+        "body": new_ad.body,
+        "email": new_ad.email,
+        "price": new_ad.price
+    }
+    answer = ad_dict
     results = await db.db_create_ad(answer)
     click.echo(f"Creating ad {answer}")
+    click.echo(f"With the results {results}")
 
 
 # @app.command()
