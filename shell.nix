@@ -1,15 +1,16 @@
 { pkgs ? import (fetchTarball "https://github.com/NixOS/nixpkgs/archive/197ddbced2ae72efbef0f5f8838a7ad3fbd986eb.tar.gz") {} }:
 
 pkgs.mkShell {
-  buildInputs = [
-    pkgs.python38Full
-    pkgs.python38Packages.pip
-    pkgs.python38Packages.virtualenv
-    pkgs.python38Packages.poetry
-    pkgs.python38Packages.pylint
-    pkgs.python38Packages.pytest
-    pkgs.postgresql_12
-    
+  buildInputs = with pkgs; [
+    python38Full
+    python38Packages.pip
+    python38Packages.virtualenv
+    python38Packages.poetry
+    python38Packages.pylint
+    python38Packages.pytest
+    postgresql_12
+    dhall
+    dhall-json
   ];
 
   shellHook = ''
