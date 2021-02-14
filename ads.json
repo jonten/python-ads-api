@@ -1,0 +1,62 @@
+[
+  {
+    "body": "Snöskoter säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Snöskoter"
+  },
+  {
+    "body": "Volvo V70 säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Volvo V70"
+  },
+  {
+    "body": "Vaz Lada säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Vaz Lada"
+  },
+  {
+    "body": "Skodia Octavia säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Skodia Octavia"
+  },
+  {
+    "body": "Dacia Duster säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Dacia Duster"
+  },
+  {
+    "body": "Land Rover Defender säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Land Rover Defender"
+  },
+  {
+    "body": "Willys Jeep säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Willys Jeep"
+  },
+  {
+    "body": "Suzuki RMZ 450 säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Suzuki RMZ 450"
+  },
+  {
+    "body": "Yamaha VMax 1200 säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Yamaha VMax 1200"
+  },
+  {
+    "body": "Triumph Sprint RS i955 säljes till högstbjudande",
+    "email": "foo@bar.com",
+    "price": 25500,
+    "subject": "Triumph Sprint RS i955"
+  }
+]
