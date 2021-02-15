@@ -47,11 +47,16 @@ async def list_all():
 @click.option("--subject", "-s", required=True, prompt=True, type=str)
 @click.option("--body", "-b", required=True, prompt=True, type=str)
 @click.option("--email", "-e", required=True, prompt=True, type=str)
-@click.option("--price", "-p", required=False, type=float, default=None)
+@click.option("--price", "-p", required=False, prompt=True, default="")
 async def create_ad(subject, body, email, price):
     """
     Create a new ad with a SUBJECT, BODY, EMAIL and PRICE
     """
+    if price == "":
+        price = None
+    else:
+        price = float(price)
+
     new_ad = main.Ad( 
         subject = subject,
         body = body,
@@ -69,8 +74,8 @@ async def create_ads(file_):
     Create a bunch of new ads from a file
     """
     os.chdir(os.path.abspath(os.curdir))
-    ads_dict = json.load(open(file_))
-    for ad in ads_dict[0:]:
+    ads_list = json.load(open(file_))
+    for ad in ads_list:
         new_ad = main.Ad(
             subject = ad["subject"],
             body = ad["body"],
