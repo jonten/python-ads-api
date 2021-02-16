@@ -11,10 +11,18 @@ async def db_create_ad(new_ad):
 
 async def db_delete_ad(ad_id:int = None):
     """Function for deleting one ad from the database"""
-
     conn = await asyncpg.connect(user="adsuser", database="adsdb")
     query = "DELETE FROM ads WHERE id=$1"
     results = await conn.execute(query, ad_id)
+    if results.endswith("0"):
+        raise DbZeroRowsProcessed()
+    return results
+
+async def db_delete_all_ads():
+    """Function for deleting all ads from the database"""
+    conn = await asyncpg.connect(user="adsuser", database="adsdb")
+    query = "DELETE FROM ads"
+    results = await conn.execute(query)
     if results.endswith("0"):
         raise DbZeroRowsProcessed()
     return results
